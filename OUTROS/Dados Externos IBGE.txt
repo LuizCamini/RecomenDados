@@ -1,0 +1,15 @@
+Importado dados externos IBGE
+
+https://agenciadenoticias.ibge.gov.br/agencia-sala-de-imprensa/2013-agencia-de-noticias/releases/14126-asi-ibge-disponibiliza-coordenadas-e-altitudes-para-21304-localidades-brasileiras
+
+--selects tabela
+select * from AttributeProperties
+select * from BR_Localidades_2010_v1
+select * from FieldLookup
+select * from GAliasTable
+select * from GCoordSystem
+select * from GeometryProperties
+select * from GFeatures
+select * from GSQLOperatorTable
+select * from ModificationLog
+select * from ModifiedTables
