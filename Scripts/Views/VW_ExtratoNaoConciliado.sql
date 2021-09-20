@@ -6,8 +6,9 @@ SELECT FORMAT(DATALANCTO,'dd/MM/yyyy','pt-br') AS DATALANCTO
      , NomeFantasia
      , Historico
      , CREDITO
-	 , CENTROCUSTO
-	 , DEBITO
+     , CENTROCUSTOID
+     , CENTROCUSTO
+     , DEBITO
      , SUBCUSTO
      , Ordem
   FROM (SELECT CP.DATAPGTO AS DATALANCTO
@@ -17,6 +18,7 @@ SELECT FORMAT(DATALANCTO,'dd/MM/yyyy','pt-br') AS DATALANCTO
              , F.NOMEFANTASIA
              , CP.OBSERVACAO AS HISTORICO
              , 0 AS CREDITO
+             , CP.CENTROCUSTOID
              , CP.VALORTOTALPAGO AS DEBITO
              , 6 AS ORDEM
              , 'Credito' AS DEBCRED
@@ -40,6 +42,7 @@ SELECT LT.DATALANCTO AS DATALANCTO
              , CASE WHEN LT.DEBITOCREDITO = 'C' THEN LT.VALOR
                                                 ELSE 0
                END AS CREDITO
+             , LT.CENTROCUSTOID
              , CASE WHEN LT.DEBITOCREDITO = 'D' THEN LT.VALOR
                                                 ELSE 0
                END AS DEBITO
@@ -66,6 +69,7 @@ SELECT LT.DATALANCTO AS DATALANCTO
              , CASE WHEN LT.DEBITOCREDITO = 'C' THEN LT.VALOR
                                                 ELSE 0
                END AS CREDITO
+             , LT.CENTROCUSTOID
              , CASE WHEN LT.DEBITOCREDITO = 'D' THEN LT.VALOR
                                                 ELSE 0
                END AS DEBITO
@@ -90,6 +94,7 @@ SELECT LT.DATALANCTO AS DATALANCTO
              , FIL.FILIALNOME AS NOMEFANTASIA
              , LT.HISTORICO
              , LT.VALOR AS CREDITO
+             , LT.CENTROCUSTOID
              , 0 AS DEBITO
              , 4 AS ORDEM
              , 'Credito' AS DEBCRED
@@ -110,6 +115,7 @@ SELECT LT.DATALANCTO AS DATALANCTO
              , FIL.FILIALNOME AS NOMEFANTASIA
              , LT.HISTORICO
              , 0 AS CREDITO
+             , LT.CENTROCUSTOID
              , LT.VALOR AS DEBITO
              , 5 AS ORDEM
              , 'Debito' AS DEBCRED
@@ -130,6 +136,7 @@ SELECT DATALANCTO
              , NOMEFANTASIA
              , HISTORICO
              , SUM(CREDITO)
+             , 0 AS CENTROCUSTOID
              , DEBITO
              , ORDEM
              , 'Credito' AS DEBCRED
@@ -159,6 +166,7 @@ SELECT DISTINCT RP.DATACHEQUEDEPOSITO AS DATALANCTO
              , CLI.NOMEFANTASIA AS NOMEFANTASIA
              , CAST('DEPOSITO Nº: ' + COALESCE(RP.NUMEROCHEQUE,'0') + ' REF. FAT. N°' + CAST(R.NUMEROFATURA AS VARCHAR(20)) + '/' + CAST(R.ANOFATURA AS VARCHAR(4)) AS VARCHAR(100)) AS HISTORICO
              , RP.VALORBAIXA AS CREDITO
+             , 0 AS CENTROCUSTOID
              , 0 AS DEBITO
              , 2 AS ORDEM
              , 'Credito' AS DEBCRED
@@ -177,6 +185,7 @@ SELECT DISTINCT FV.DATAPAGAMENTO AS DATALANCTO
              , CLI.NOMEFANTASIA AS NOMEFANTASIA
              , CAST('RECEBIMENTO DE CT-E/MD-E FIL ' + UPPER(FIL.SIGLA) + ' NR. ' + CAST(FV.NUMERODOCUMENTO AS VARCHAR(20)) + '.' AS VARCHAR(200)) AS HISTORICO
              , FV.VALORPAGO AS CREDITO
+             , 0 AS CENTROCUSTOID
              , 0 AS DEBITO
              , 1 AS ORDEM
              , 'Credito' AS DEBCRED
@@ -187,4 +196,4 @@ SELECT DISTINCT FV.DATAPAGAMENTO AS DATALANCTO
                SITRAWEBNEW.DBO.FILIAIS FIL ON FIL.FILIALID = FV.FILIALORIGEMID
          WHERE FV.STATUSFATURAMENTOID = 3
            AND FV.DATAPAGAMENTO IS NOT NULL
-       ) MAIN ;
+       ) EXTRATONAOCONCILIADO ;
