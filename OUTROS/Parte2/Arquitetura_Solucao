@@ -1,0 +1,20 @@
+POWER B.I DESKTOP
+POWER B.I ONLINE
+MS-SQL SERVER
+
+
+
+Arquitetura do Cliente:
+
+A estrutura do banco de dados Transacional (OLTP) utilizada por nosso cliente é o MS-SQLSERVER hospedado na AWS (Amazon Web Services) utilizando o serviço RDS permitindo que cada instancia possa possuir até 100 Databases, possuindo a estrutura do Banco de Dados da seguinte forma: 
+
+1 - A Instancia principal Chamada pelo nome do projeto da empresa, SITRAWEBNEW com 1 Database de mesmo nome, esta database controla todos os dados comuns utilizados pelos clientes (Transportadoras), como Tipo de documento, cadastros de transportadoras, controle de licenças, tipo de frete etc ... todos com seus ID's e suas descrições normalizado na 3º forma normal;
+
+2 - Na mesma instancia principal existem tambem os outros Databases separados pelo numero da licença de cada Cliente (transportadora) onde todos se comunicam com a Database principal SITRAWEBNEW porém nenhuma se comunica entre si, tambem existe outras instancias cada uma com seus databases onde estas se comunicam atraves do recurso do MS-SQL SERVER Linked Server para permitir a comunicação das databases dos clientes (transportadoras) com a SITRAWEBNEW, isto deve-se principalmente pelo controle de  segurança e isolamento dos dados que devem permanecer viziveis apenas dentro de cada licença.
+
+
+Arquitetura da Solução:
+
+A Fonte de dados utiliza o MS-SQLSERVER que econtra-se hospedada na AWS (Amazon Web Services) utilizando o serviço do RDS onde ela permite que nosso serviço conecte-se atraves de ODBC como um serviço que permite a execução do ETL (extração, tratamento e carga de dados) para nossa base de dados em uma instancia AWS no RDS com os dados ja tratados, onde cada dimensão recebe seus dados que são consumidos pelo Power B.I alimentando os paineis (Dashboards).
+
+O desenvolvimento do Serviço de ETL sera utilizado o Python e suas bibliotecas permitindo a execução do ETL.

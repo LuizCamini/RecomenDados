@@ -1,0 +1,37 @@
+Boa noite a Todos, eu e o @Marcos Impacta BD estamos na Sala Recomendados em estado de EMERGENCIA pois nosso projeto esta PARADO praticamente, ou seja, não esta evoluindo, portanto planejamos a primeira parte da retomada que segue abaixo:
+
+PLANEJAMENTO RETOMADA DO PROJETO:
+
+1 - Criação do banco no EC2 (criado)
+•	USR: recomendados
+•	PSW: !Recomen20Dados21!
+
+1.2 - Definição de permissões
+
+1.3 - Subir Bancos de dados para SQL SERVER EC2
+•	sitrawebnew - 200mb
+•	516 - 510mb
+•	757 - 828mb
+•	799 - 925mb
+•	1836 - 523 mb
+•	2184 - 833mb
+•	2096 - 3.5gb
+
+1.4 - executar os scripts de criação de views
+
+
+2 - Revisar documentação parte 3 - Data de entrega: Sexta 17/09 
+•	deixar pronto dia 16 (iniciar 15/09) URGENTISSIMO
+
+
+3 - Finalizar a criação dos painéis (dia 18/09);
+
+4 - Publicar na WEB o painel finalizado(dia 21 em diante, pois vamos apresentar os painéis para o professor e fazer as correções necessárias);
+
+5 - Definir modelo de predição (sprint 7 em diante trabalhar com as predições)
+
+6 - Revisar documentação desde o início atendendo aos solicitado pelo professor – (dia 21 em diante) – Prazo: 27/09
+
+7 - Carregar dados da predição em banco de dados;
+
+8 - Criar painel para ler dados de predição;
