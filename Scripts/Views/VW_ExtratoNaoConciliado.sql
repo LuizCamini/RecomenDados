@@ -6,6 +6,8 @@ SELECT FORMAT(DATALANCTO,'dd/MM/yyyy','pt-br') AS DATALANCTO
      , NomeFantasia
      , Historico
      , CREDITO
+	 , CENTROCUSTO
+	 , DEBITO
      , SUBCUSTO
      , Ordem
   FROM (SELECT CP.DATAPGTO AS DATALANCTO
