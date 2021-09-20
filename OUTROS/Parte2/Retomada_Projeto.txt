@@ -2,13 +2,13 @@ Boa noite a Todos, eu e o @Marcos Impacta BD estamos na Sala Recomendados em est
 
 PLANEJAMENTO RETOMADA DO PROJETO:
 
-1 - Criação do banco no EC2 (criado)
+1 - Criação do banco no EC2 (criado) ok
 •	USR: recomendados
 •	PSW: !Recomen20Dados21!
 
-1.2 - Definição de permissões
+1.2 - Definição de permissões ok
 
-1.3 - Subir Bancos de dados para SQL SERVER EC2
+1.3 - Subir Bancos de dados para SQL SERVER EC2 ok
 •	sitrawebnew - 200mb
 •	516 - 510mb
 •	757 - 828mb
@@ -17,10 +17,10 @@ PLANEJAMENTO RETOMADA DO PROJETO:
 •	2184 - 833mb
 •	2096 - 3.5gb
 
-1.4 - executar os scripts de criação de views
+1.4 - executar os scripts de criação de views ok
 
 
-2 - Revisar documentação parte 3 - Data de entrega: Sexta 17/09 
+2 - Revisar documentação parte 3 - Data de entrega: Sexta 17/09 ok
 •	deixar pronto dia 16 (iniciar 15/09) URGENTISSIMO
 
 
