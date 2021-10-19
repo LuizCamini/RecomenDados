@@ -34,8 +34,12 @@ SELECT DISTINCT Col.ColetaId AS ColetaId
      , ColLocal.Solicitante AS SolicitanteLocal
      , Prod.ProdutoDesc AS ProdutoDesc
      , TpFrete.TipoFreteDesc AS TipoFreteDesc
-     , ColSt.ColetaStatusSigla AS ColetaStatusSigla
-     , ColSt.ColetaStatusDesc AS ColetaStatusDesc
+     , CASE 
+     	WHEN ColSt.ColetaStatusSigla IS NULL THEN 'EM'
+     	ELSE ColSt.ColetaStatusSigla END  AS ColetaStatusSigla
+     , CASE 
+     	WHEN ColSt.ColetaStatusDesc IS NULL THEN 'Emitida'
+     	ELSE ColSt.ColetaStatusDesc  END AS ColetaStatusDesc
      , Fil.Sigla AS Sigla
   FROM Coleta Col LEFT OUTER JOIN
        ColetaDestinatario ColDest ON ColDest.ColetaId = Col.ColetaId
