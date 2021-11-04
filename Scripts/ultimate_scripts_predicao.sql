@@ -24,6 +24,34 @@ BEGIN
 
 END
 GO
+--CRIACAO FUNCTION PARA REMOVER ACENTOS
+CREATE OR ALTER FUNCTION [dbo].[fnRemoveAcentuacao](
+    @String VARCHAR(MAX)
+)
+RETURNS VARCHAR(MAX)
+AS
+BEGIN
+    
+    /****************************************************************************************************************/
+    /** RETIRA ACENTUAÇÃO DAS VOGAIS **/
+    /****************************************************************************************************************/
+    SET @String = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(@String,'á','a'),'à','a'),'â','a'),'ã','a'),'ä','a')
+    SET @String = REPLACE(REPLACE(REPLACE(REPLACE(@String,'é','e'),'è','e'),'ê','e'),'ë','e')
+    SET @String = REPLACE(REPLACE(REPLACE(REPLACE(@String,'í','i'),'ì','i'),'î','i'),'ï','i')
+    SET @String = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(@String,'ó','o'),'ò','o'),'ô','o'),'õ','o'),'ö','o')
+    SET @String = REPLACE(REPLACE(REPLACE(REPLACE(@String,'ú','u'),'ù','u'),'û','u'),'ü','u')
+    
+    /****************************************************************************************************************/
+    /** RETIRA ACENTUAÇÃO DAS CONSOANTES **/
+    /****************************************************************************************************************/
+    SET @String = REPLACE(@String,'ý','y')
+    SET @String = REPLACE(@String,'ñ','n')
+    SET @String = REPLACE(@String,'ç','c')
+            
+    RETURN UPPER(@String)
+
+END
+GO
 --PREPARACAO DOS DADOS PARA UTILIZAR NA PREDICAO FINAL
 USE [107]
 GO
@@ -185,12 +213,15 @@ GO
 --CRIACAO DE VIEW PARA USO NA PREDICAO
 USE [OPE]
 GO
+DROP VIEW VW_Predicao
+GO
 CREATE OR ALTER VIEW VW_Predicao
 AS
-SELECT 
+SELECT
 PREP.TransportadoraID
 ,PREP.DocId
 ,PREP.TipoDocumentoId
+,PREP.LocalColetaUf + '-' + PREP.LocalEntregaUf AS OrigemDestinoUF
 ,PREP.RegiaoUFColetaid
 ,PREP.NomeRegiaoColeta
 ,PREP.LocalColetaUf
@@ -206,10 +237,53 @@ PREP.TransportadoraID
 ,PREP.Peso
 ,PRPVOL.VolumesQTD
 ,PREP.TotalFrete
+,CASE 
+    WHEN MUN.codigo_ibge = MUN2.codigo_ibge THEN 5 
+    ELSE 
+    dbo.fncCalcula_Distancia_Coordenada(MUN.latitude,MUN.longitude,MUN2.latitude,MUN2.longitude) END  as Distancia
 FROM PREPARACAO AS PREP
 INNER JOIN 
     PreparacaoNotasVolumes AS  PRPVOL 
             ON PREP.DocId = PRPVOL.DocID 
             AND PREP.TransportadoraID = PRPVOL.TransportadoraID
+INNER JOIN 
+    estados AS EST 
+            ON PREP.LocalColetaUf COLLATE SQL_Latin1_General_CP1_CI_AI = EST.uf COLLATE SQL_Latin1_General_CP1_CI_AI
+INNER JOIN 
+    estados AS EST2 
+            ON PREP.LocalEntregaUf COLLATE SQL_Latin1_General_CP1_CI_AI = EST2.uf COLLATE SQL_Latin1_General_CP1_CI_AI
+LEFT JOIN 
+    municipios as mun 
+            ON dbo.fnRemoveAcentuacao(prep.LocalColetaCidade) COLLATE SQL_Latin1_General_CP1_CI_AI = dbo.fnRemoveAcentuacao(mun.nome) COLLATE SQL_Latin1_General_CP1_CI_AI
+AND EST.codigo_uf = MUN.codigo_uf
+LEFT JOIN 
+    municipios AS mun2 
+            ON dbo.fnRemoveAcentuacao(prep.LocalEntregaCidade) COLLATE SQL_Latin1_General_CP1_CI_AI = dbo.fnRemoveAcentuacao(mun2.nome) COLLATE SQL_Latin1_General_CP1_CI_AI
+AND EST2.codigo_uf = MUN2.codigo_uf
 GO
+--TESTE VIEW QUANTIDADE TOTAL DE DADOS = 128.885 QUANTIDADE VALIDA DE DADOS 128.708
+SELECT * FROM VW_Predicao
+WHERE Distancia IS NOT NULL 
+GO
+--PRE ANALISE TOTAL 116 ORIGEM/DESTINO DIFERENTES
+SELECT
+    OrigemDestinoUF
+    ,COUNT(OrigemDestinoUF) AS CONTADOR
+FROM VW_Predicao
+WHERE Distancia IS NOT NULL 
+AND LocalColetaUf <> LocalEntregaUf
+GROUP BY OrigemDestinoUF
+ORDER BY CONTADOR DESC
+GO
+--PRE ANALISE TOTAL 9 ORIGEM/DESTINO IGUAIS 
+SELECT
+    OrigemDestinoUF
+    ,COUNT(OrigemDestinoUF) AS CONTADOR
+FROM VW_Predicao
+WHERE Distancia IS NOT NULL 
+AND LocalColetaUf = LocalEntregaUf
+GROUP BY OrigemDestinoUF
+ORDER BY CONTADOR DESC
+GO
+
 
