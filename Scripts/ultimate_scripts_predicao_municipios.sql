@@ -238,8 +238,8 @@ PREP.TransportadoraID
 ,CASE 
     WHEN MUN.codigo_ibge = MUN2.codigo_ibge THEN 5 
     ELSE 
-    dbo.fncCalcula_Distancia_Coordenada(MUN.latitude,MUN.longitude,MUN2.latitude,MUN2.longitude) END  as Distancia
-,cast(PREP.TotalFrete AS decimal(13,2)) AS TotalFrete
+    cast(round(dbo.fncCalcula_Distancia_Coordenada(MUN.latitude,MUN.longitude,MUN2.latitude,MUN2.longitude),1) as decimal(6,1)) END  as Distancia
+    ,cast(PREP.TotalFrete AS decimal(13,2)) AS TotalFrete
 FROM PREPARACAO AS PREP
 INNER JOIN 
     PreparacaoNotasVolumes AS  PRPVOL 
