@@ -331,59 +331,209 @@ and cast((PREP.TotalFrete / PRPVOL.VolumesQTD) * 100 as numeric(13,2)) <= 9000.0
 
 
 
-
-
-
-
-
-
-select TransportadoraID, OrigemDestinoUF,
-case 
-	when OrigemDestinoUF = 'MT-MT' then 1
-	when OrigemDestinoUF = 'SP-SP' then 2
-	when OrigemDestinoUF = 'SP-MT' then 3
-	when OrigemDestinoUF = 'SP-MG' then 4
-	when OrigemDestinoUF = 'SP-RJ' then 5
-	when OrigemDestinoUF = 'SP-PR' then 6
-	when OrigemDestinoUF = 'SP-SC' then 7
-	when OrigemDestinoUF = 'SP-PA' then 8
-	when OrigemDestinoUF = 'SP-RS' then 9
-	when OrigemDestinoUF = 'SP-GO' then 10
-	when OrigemDestinoUF = 'SP-BA' then 11
-	when OrigemDestinoUF = 'SP-DF' then 12
-	when OrigemDestinoUF = 'SP-MS' then 13
-	when OrigemDestinoUF = 'SP-PE' then 14
-	when OrigemDestinoUF = 'SP-ES' then 15
-	when OrigemDestinoUF = 'SP-MA' then 16
-	when OrigemDestinoUF = 'SP-PB' then 17
-	when OrigemDestinoUF = 'AL-SP' then 18
-	when OrigemDestinoUF = 'SP-CE' then 19
-	when OrigemDestinoUF = 'SP-RN' then 20
-	when OrigemDestinoUF = 'SP-TO' then 21
-	when OrigemDestinoUF = 'SP-SE' then 22
-	when OrigemDestinoUF = 'SP-PI' then 23
-	when OrigemDestinoUF = 'SP-AL' then 24
-	when OrigemDestinoUF = 'SP-RO' then 25
-	when OrigemDestinoUF = 'MG-SP' then 26
-	when OrigemDestinoUF = 'MG-RJ' then 27
-	when OrigemDestinoUF = 'PR-SP' then 28
-	when OrigemDestinoUF = 'SP-AM' then 29
-	when OrigemDestinoUF = 'PA-SP' then 30
-	when OrigemDestinoUF = 'MG-PE' then 31
-	when OrigemDestinoUF = 'RJ-SP' then 32
-	when OrigemDestinoUF = 'SP-AC' then 33
-	when OrigemDestinoUF = 'RS-SP' then 34
-	when OrigemDestinoUF = 'SP-RR' then 35
-	when OrigemDestinoUF = 'MG-MG' then 36
-	when OrigemDestinoUF = 'PE-SP' then 37
-	when OrigemDestinoUF = 'SP-AP' then 38
-	when OrigemDestinoUF = 'SC-PA' then 39
-	when OrigemDestinoUF = 'DF-SP' then 40
-	when OrigemDestinoUF = 'MG-DF' then 41
-	when OrigemDestinoUF = 'MT-SP' then 42
-end
-as ID_OrigemDestinoUF, ValorMercadoria, Peso, VolumesQTD, Distancia, ALVO 
+--CRIAR TABELA PREDICAO
+select TransportadoraID,
+OrigemDestinoUF, 
+case
+when OrigemDestinoUF = 'MT-MT'
+       then 1
+when OrigemDestinoUF = 'SP-SP'
+       then 2
+when OrigemDestinoUF = 'SP-MT'
+       then 3
+when OrigemDestinoUF = 'SP-MG'
+       then 4
+when OrigemDestinoUF = 'SP-RJ'
+       then 5
+when OrigemDestinoUF = 'SP-PR'
+       then 6
+when OrigemDestinoUF = 'SP-SC'
+       then 7
+when OrigemDestinoUF = 'SP-PA'
+       then 8
+when OrigemDestinoUF = 'SP-RS'
+       then 9
+when OrigemDestinoUF = 'SP-GO'
+       then 10
+when OrigemDestinoUF = 'SP-BA'
+       then 11
+when OrigemDestinoUF = 'SP-DF'
+       then 12
+when OrigemDestinoUF = 'SP-MS'
+       then 13
+when OrigemDestinoUF = 'SP-PE'
+       then 14
+when OrigemDestinoUF = 'SP-ES'
+       then 15
+when OrigemDestinoUF = 'SP-MA'
+       then 16
+when OrigemDestinoUF = 'SP-PB'
+       then 17
+when OrigemDestinoUF = 'AL-SP'
+       then 18
+when OrigemDestinoUF = 'SP-CE'
+       then 19
+when OrigemDestinoUF = 'SP-RN'
+       then 20
+when OrigemDestinoUF = 'SP-TO'
+       then 21
+when OrigemDestinoUF = 'SP-SE'
+       then 22
+when OrigemDestinoUF = 'SP-PI'
+       then 23
+when OrigemDestinoUF = 'SP-AL'
+       then 24
+when OrigemDestinoUF = 'SP-RO'
+       then 25
+when OrigemDestinoUF = 'MG-SP'
+       then 26
+when OrigemDestinoUF = 'MG-RJ'
+       then 27
+when OrigemDestinoUF = 'PR-SP'
+       then 28
+when OrigemDestinoUF = 'SP-AM'
+       then 29
+when OrigemDestinoUF = 'PA-SP'
+       then 30
+when OrigemDestinoUF = 'MG-PE'
+       then 31
+when OrigemDestinoUF = 'RJ-SP'
+       then 32
+when OrigemDestinoUF = 'SP-AC'
+       then 33
+when OrigemDestinoUF = 'RS-SP'
+       then 34
+when OrigemDestinoUF = 'SP-RR'
+       then 35
+when OrigemDestinoUF = 'MG-MG'
+       then 36
+when OrigemDestinoUF = 'PE-SP'
+       then 37
+when OrigemDestinoUF = 'SP-AP'
+       then 38
+when OrigemDestinoUF = 'SC-PA'
+       then 39
+when OrigemDestinoUF = 'DF-SP'
+       then 40
+when OrigemDestinoUF = 'MG-DF'
+       then 41
+when OrigemDestinoUF = 'MT-SP'
+       then 42
+end  as ID_OrigemDestinoUF, 
+cast(ValorMercadoria as numeric(8,2)) as ValorMercadoria, 
+cast(Peso as            numeric(7,2)) as Peso, 
+VolumesQTD, 
+cast(round(Distancia, 2) as numeric(6,2)) as Distancia, 
+cast(ALVO as numeric(7,2)) as ALVO
+INTO PREDICAO
 from VW_Predicao_base
-where Distancia > 0 
+where Distancia is not null
 and cast((ALVO / Distancia) * 100 as numeric(13,2)) <= 1000.00
+GO
+--TRUNCATE NA TABELA PREDICAO
+TRUNCATE TABLE PREDICAO
+GO
+--ADICIONANDO COLUNA ID NA TABELA PREDICAO PARA AJUDAR A IGNORAR OS PRIMEIROS E ULTIMOS 1% DA TABELA
+ALTER TABLE PREDICAO ADD ID INT IDENTITY
+GO
+--INSERINDO NOVAMENTE OS DADOS NA TABELA PREDICAO
+INSERT INTO PREDICAO select TransportadoraID,
+OrigemDestinoUF, 
+case
+when OrigemDestinoUF = 'MT-MT'
+       then 1
+when OrigemDestinoUF = 'SP-SP'
+       then 2
+when OrigemDestinoUF = 'SP-MT'
+       then 3
+when OrigemDestinoUF = 'SP-MG'
+       then 4
+when OrigemDestinoUF = 'SP-RJ'
+       then 5
+when OrigemDestinoUF = 'SP-PR'
+       then 6
+when OrigemDestinoUF = 'SP-SC'
+       then 7
+when OrigemDestinoUF = 'SP-PA'
+       then 8
+when OrigemDestinoUF = 'SP-RS'
+       then 9
+when OrigemDestinoUF = 'SP-GO'
+       then 10
+when OrigemDestinoUF = 'SP-BA'
+       then 11
+when OrigemDestinoUF = 'SP-DF'
+       then 12
+when OrigemDestinoUF = 'SP-MS'
+       then 13
+when OrigemDestinoUF = 'SP-PE'
+       then 14
+when OrigemDestinoUF = 'SP-ES'
+       then 15
+when OrigemDestinoUF = 'SP-MA'
+       then 16
+when OrigemDestinoUF = 'SP-PB'
+       then 17
+when OrigemDestinoUF = 'AL-SP'
+       then 18
+when OrigemDestinoUF = 'SP-CE'
+       then 19
+when OrigemDestinoUF = 'SP-RN'
+       then 20
+when OrigemDestinoUF = 'SP-TO'
+       then 21
+when OrigemDestinoUF = 'SP-SE'
+       then 22
+when OrigemDestinoUF = 'SP-PI'
+       then 23
+when OrigemDestinoUF = 'SP-AL'
+       then 24
+when OrigemDestinoUF = 'SP-RO'
+       then 25
+when OrigemDestinoUF = 'MG-SP'
+       then 26
+when OrigemDestinoUF = 'MG-RJ'
+       then 27
+when OrigemDestinoUF = 'PR-SP'
+       then 28
+when OrigemDestinoUF = 'SP-AM'
+       then 29
+when OrigemDestinoUF = 'PA-SP'
+       then 30
+when OrigemDestinoUF = 'MG-PE'
+       then 31
+when OrigemDestinoUF = 'RJ-SP'
+       then 32
+when OrigemDestinoUF = 'SP-AC'
+       then 33
+when OrigemDestinoUF = 'RS-SP'
+       then 34
+when OrigemDestinoUF = 'SP-RR'
+       then 35
+when OrigemDestinoUF = 'MG-MG'
+       then 36
+when OrigemDestinoUF = 'PE-SP'
+       then 37
+when OrigemDestinoUF = 'SP-AP'
+       then 38
+when OrigemDestinoUF = 'SC-PA'
+       then 39
+when OrigemDestinoUF = 'DF-SP'
+       then 40
+when OrigemDestinoUF = 'MG-DF'
+       then 41
+when OrigemDestinoUF = 'MT-SP'
+       then 42
+end  as ID_OrigemDestinoUF, 
+cast(ValorMercadoria as numeric(8,2)) as ValorMercadoria, 
+cast(Peso as            numeric(7,2)) as Peso, 
+VolumesQTD, 
+cast(round(Distancia, 2) as numeric(6,2)) as Distancia, 
+cast(ALVO as numeric(7,2)) as ALVO
+from VW_Predicao_base
+where Distancia is not null
+and cast((ALVO / Distancia) * 100 as numeric(13,2)) <= 1000.00
+GO
+--VER DADOS - MESMO SELECT UTILIZADO PARA CRIAR O DATASET NO PANDAS
+SELECT * FROM PREDICAO WHERE ID BETWEEN 427 AND 42282 --PARA IGNORAR O PRIMEIRO E ULTIMO 1% DA TABELA, PEGANDO OS 98% DO MEIO.
 
